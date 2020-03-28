@@ -1,5 +1,3 @@
-package OsProject;
-
 /**
  * IndianRail has decided to improve its efficiency by automating not just its trains but also its
  * passengers. Each passenger and each train is controlled by a thread. You have been hired to write
@@ -34,6 +32,33 @@ public class IndianRail{
             passengersInTrain = 0;
             this.lock = lock;
             this.passengerSeatedCondition = passengerSeatedCondition;
+        }
+    }
+	static class Train extends Thread {
+        Station s;
+        Train(Station s) {
+            this.s = s;
+        }
+        public void run() {
+            try {
+                station_load_train(s,noOfFreeSeatsInTheTrain);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    static class  Passenger extends Thread {
+        Station s;
+        Passenger(Station s) {
+            this.s = s;
+        }
+        public void run() {
+            try {
+                station_wait_for_train(s);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
