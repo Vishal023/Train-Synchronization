@@ -29,11 +29,17 @@ In addition:
 You must write your solution in C using locks and condition variables:
 
 • lock_init (struct lock *lock)
+
 • lock_acquire(struct lock *lock)
+
 • lock_release(struct lock *lock)
+
 • cond_init(struct condition *cond)
+
 • cond_wait(struct condition *cond, struct lock *lock)
+
 • cond_signal(struct condition *cond, struct lock *lock)
+
 • cond_broadcast(struct condition *cond, struct lock *lock) 
 
 Use only these functions (e.g., no semaphores or other synchronization primitives).
