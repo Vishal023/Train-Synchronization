@@ -120,5 +120,65 @@ public class IndianRail{
         station.lock.unlock();
 
     }
+		public static void main(String[] args) throws InterruptedException, IOException {
+
+        Lock lock = new ReentrantLock();
+        Condition passengerSeatedCondition = lock.newCondition();
+        Station s = new Station(lock,passengerSeatedCondition);
+
+        Scanner scanner = new Scanner(System.in);
+
+
+        System.out.println(" _______________________________INDIAN RAIL_______________________________");
+        System.out.println("|                                                                         |");
+        System.out.print("|\tENTER THE NUMBER OF PASSENGERS AT THE STATION : ");
+        totalNumberOfPassenger = scanner.nextInt();
+        System.out.println("|_________________________________________________________________________|");
+
+        int i = 1;
+        System.out.println();
+        while (noOfFreeSeatsInTheTrain != -1) {
+            int totalPassengers = totalNumberOfPassenger;
+
+            System.out.printf(" _______________________________ TRAIN %d ________________________________\n",i);
+            System.out.println("|                                                                         |");
+            System.out.println("|\tTHE NO OF WAITING PASSENGERS AT THE STATION : "+(totalPassengers-s.totalBoarderPassengers));
+            System.out.print("|\tENTER TOTAL NUMBER OF FREE SEATS IN THIS TRAIN : ");
+            noOfFreeSeatsInTheTrain = scanner.nextInt();
+            if (noOfFreeSeatsInTheTrain == -1) {
+                System.out.printf("|\tTOTAL PASSENGERS BOARDED : %d\n",s.totalBoarderPassengers);
+                System.out.printf("|\tPASSENGERS LEFT IN THE STATION : %d\n",(totalPassengers-s.totalBoarderPassengers)));
+                System.out.println("|_________________________________________________________________________|");
+                break;
+            }
+            Passenger[] thread = new Passenger[totalNumberOfPassenger];
+            for (int j = 0; j <totalPassengers ; j++) {
+                thread[j] = new Passenger(s);
+                thread[j].start();
+                synchronized (s.lock){
+                    lock.wait(1);
+                }
+            }
+            synchronized (s.lock){
+                lock.wait(1);
+            }
+            System.out.printf("|\tTRAIN ARRIVING AT THE STATION WITH %d FREE SEATS\n",noOfFreeSeatsInTheTrain);
+            Train newTrain = new Train(s);
+            newTrain.start();
+            station_load_train(s,noOfFreeSeatsInTheTrain);
+            station_on_board(s);
+            System.out.printf("|\tTOTAL PASSENGERS BOARDED : %d\n", :s.totalBoarderPassengers);
+            System.out.printf("|\tPASSENGERS LEFT IN THE STATION : %d\n",(totalPassengers-s.totalBoarderPassengers));
+            System.out.println("|_________________________________________________________________________|");
+            i++;
+            s.passengersAtTheStation = totalPassengers - s.totalBoarderPassengers;
+            s.passengersInTrain = 0;
+            System.out.println();
+            if (totalPassengers-s.totalBoarderPassengers == 0) {
+                System.out.println("ALL PASSENGERS BOARDED");
+                System.exit(0);
+            }
+        }
+    }
 
 }
