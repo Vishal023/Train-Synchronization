@@ -34,7 +34,8 @@ public class IndianRail{
             this.passengerSeatedCondition = passengerSeatedCondition;
         }
     }
-	static class Train extends Thread {
+
+    static class Train extends Thread {
         Station s;
         Train(Station s) {
             this.s = s;
@@ -61,7 +62,7 @@ public class IndianRail{
             }
         }
     }
-	/**
+    /**
      * When a passenger arrives in a station, it first invokes the function
      * station_wait_for_train(struct station *station)
      * This function must not return until a train is in the station (i.e., a call to station_load_train is in
@@ -120,7 +121,8 @@ public class IndianRail{
         station.lock.unlock();
 
     }
-		public static void main(String[] args) throws InterruptedException, IOException {
+
+    public static void main(String[] args) throws InterruptedException, IOException {
 
         Lock lock = new ReentrantLock();
         Condition passengerSeatedCondition = lock.newCondition();
@@ -128,6 +130,12 @@ public class IndianRail{
 
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("\n           o x o x o x o . . .\n" +
+                "         o      _____            _______________ ___=====__T___\n" +
+                "       .][__n_n_|DD[  ====_____  |    |.\\/.|   | |   |_|     |_\n" +
+                "      >(________|__|_[_________]_|____|_/\\_|___|_|___________|_|\n" +
+                "      _/oo OOOOO oo`  ooo   ooo   o^o       o^o   o^o     o^o\n" +
+                "-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-\n");
 
         System.out.println(" _______________________________INDIAN RAIL_______________________________");
         System.out.println("|                                                                         |");
@@ -142,12 +150,13 @@ public class IndianRail{
 
             System.out.printf(" _______________________________ TRAIN %d ________________________________\n",i);
             System.out.println("|                                                                         |");
-            System.out.println("|\tTHE NO OF WAITING PASSENGERS AT THE STATION : "+(totalPassengers-s.totalBoarderPassengers));
+            System.out.println("|\tTHE NO OF WAITING PASSENGERS AT THE STATION : "+
+                    ( (totalPassengers - s.totalBoarderPassengers)>0?"\uD83E\uDDCD".repeat((totalPassengers - s.totalBoarderPassengers)) : (totalPassengers-s.totalBoarderPassengers) ));
             System.out.print("|\tENTER TOTAL NUMBER OF FREE SEATS IN THIS TRAIN : ");
             noOfFreeSeatsInTheTrain = scanner.nextInt();
             if (noOfFreeSeatsInTheTrain == -1) {
-                System.out.printf("|\tTOTAL PASSENGERS BOARDED : %d\n",s.totalBoarderPassengers);
-                System.out.printf("|\tPASSENGERS LEFT IN THE STATION : %d\n",(totalPassengers-s.totalBoarderPassengers)));
+                System.out.printf("|\tTOTAL PASSENGERS BOARDED : %s\n", s.totalBoarderPassengers>0?"\uD83E\uDDCD".repeat(s.totalBoarderPassengers):s.totalBoarderPassengers);
+                System.out.printf("|\tPASSENGERS LEFT IN THE STATION : %s\n",((totalPassengers - s.totalBoarderPassengers)>0?"\uD83E\uDDCD".repeat(totalPassengers - s.totalBoarderPassengers):(totalPassengers-s.totalBoarderPassengers)));
                 System.out.println("|_________________________________________________________________________|");
                 break;
             }
@@ -162,13 +171,13 @@ public class IndianRail{
             synchronized (s.lock){
                 lock.wait(1);
             }
-            System.out.printf("|\tTRAIN ARRIVING AT THE STATION WITH %d FREE SEATS\n",noOfFreeSeatsInTheTrain);
+            System.out.printf("|\tTRAIN ARRIVING AT THE STATION WITH %s FREE SEATS\n", (noOfFreeSeatsInTheTrain>0?"\uD83E\uDDCD".repeat(noOfFreeSeatsInTheTrain):noOfFreeSeatsInTheTrain));
             Train newTrain = new Train(s);
             newTrain.start();
             station_load_train(s,noOfFreeSeatsInTheTrain);
             station_on_board(s);
-            System.out.printf("|\tTOTAL PASSENGERS BOARDED : %d\n", :s.totalBoarderPassengers);
-            System.out.printf("|\tPASSENGERS LEFT IN THE STATION : %d\n",(totalPassengers-s.totalBoarderPassengers));
+            System.out.printf("|\tTOTAL PASSENGERS BOARDED : %s\n", s.totalBoarderPassengers>0?"\uD83E\uDDCD".repeat(s.totalBoarderPassengers):s.totalBoarderPassengers);
+            System.out.printf("|\tPASSENGERS LEFT IN THE STATION : %s\n",((totalPassengers - s.totalBoarderPassengers)>0?"\uD83E\uDDCD".repeat(totalPassengers - s.totalBoarderPassengers):(totalPassengers-s.totalBoarderPassengers)));
             System.out.println("|_________________________________________________________________________|");
             i++;
             s.passengersAtTheStation = totalPassengers - s.totalBoarderPassengers;
@@ -180,5 +189,4 @@ public class IndianRail{
             }
         }
     }
-
 }
