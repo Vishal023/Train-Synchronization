@@ -97,6 +97,7 @@ public class IndianRail{
         }
         synchronized (station.passengerSeatedCondition) {
             station.passengerSeatedCondition.wait(1);
+            station_on_board(station);
         }
         station.lock.unlock();
     }
@@ -175,7 +176,6 @@ public class IndianRail{
             Train newTrain = new Train(s);
             newTrain.start();
             station_load_train(s,noOfFreeSeatsInTheTrain);
-            station_on_board(s);
             System.out.printf("|\tTOTAL PASSENGERS BOARDED : %s\n", s.totalBoarderPassengers>0?"\uD83E\uDDCD".repeat(s.totalBoarderPassengers):s.totalBoarderPassengers);
             System.out.printf("|\tPASSENGERS LEFT IN THE STATION : %s\n",((totalPassengers - s.totalBoarderPassengers)>0?"\uD83E\uDDCD".repeat(totalPassengers - s.totalBoarderPassengers):(totalPassengers-s.totalBoarderPassengers)));
             System.out.println("|_________________________________________________________________________|");
