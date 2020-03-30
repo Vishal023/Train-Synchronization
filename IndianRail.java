@@ -165,12 +165,6 @@ public class IndianRail{
             for (int j = 0; j <totalPassengers ; j++) {
                 thread[j] = new Passenger(s);
                 thread[j].start();
-                synchronized (s.lock){
-                    lock.wait(1);
-                }
-            }
-            synchronized (s.lock){
-                lock.wait(1);
             }
             System.out.printf("|\tTRAIN ARRIVING AT THE STATION WITH %s FREE SEATS\n", (noOfFreeSeatsInTheTrain>0?"\uD83E\uDDCD".repeat(noOfFreeSeatsInTheTrain):noOfFreeSeatsInTheTrain));
             Train newTrain = new Train(s);
